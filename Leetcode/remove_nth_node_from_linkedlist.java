@@ -17,5 +17,5 @@ class Solution {
         //Skip the desired node
         slow.next = slow.next.next;
         return start.next;
-    }
+    } 
 }
