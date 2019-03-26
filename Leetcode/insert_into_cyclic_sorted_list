@@ -1,0 +1,52 @@
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node next;
+
+    public Node() {}
+
+    public Node(int _val,Node _next) {
+        val = _val;
+        next = _next;
+    }
+};
+*/
+class Solution {
+    public Node insert(Node head, int insertVal) {
+        Node newNode = new Node(insertVal,null);
+        if (head == null) {
+            newNode.next = newNode;
+            return newNode;
+        }
+        
+        Node curr = head;
+        Node nextNode = head.next;
+        while (true) {
+            // val is in between curr and nextNode.
+            if (curr.val <= insertVal && insertVal <= nextNode.val) {
+                newNode.next =  nextNode;
+                curr.next = newNode;
+                break;
+            }
+            
+            // val is either largest or smallest.
+            if (curr.val > nextNode.val && (insertVal > curr.val || insertVal < nextNode.val)) {
+                newNode.next = nextNode;
+                curr.next = newNode;
+                break;
+            }
+            curr = nextNode;
+            nextNode = nextNode.next;
+            
+            // edge case: same value for every node.
+            if (curr == head) {
+                newNode.next = nextNode;
+                curr.next = newNode;
+                break;
+            }
+        }
+        
+        return head;
+    }
+}
