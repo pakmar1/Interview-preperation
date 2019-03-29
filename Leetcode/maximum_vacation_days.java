@@ -1,34 +1,23 @@
 class Solution {
-    int n;
-    
     public int maxVacationDays(int[][] flights, int[][] days) {
-        
-        int K = days[0].length-1;
-        n=flights.length;
-        
-        return dfs(0, -1, K, flights, days, new int[days.length][days[0].length]);
+        int[][] memo = new int[flights.length][days[0].length];
+        for (int[] l: memo)
+            Arrays.fill(l, Integer.MIN_VALUE);
+        return dfs(flights, days, 0, 0, memo);
     }
-    
-    int dfs(int city, int k, int K, int[][] flights, int[][] days, int[][] dp) {
-            
-        if(k!= -1 && dp[city][k] != 0) return dp[city][k];
-
-        if(k==K) return days[city][k];
-
-        int max = 0;
-
-        //for each connected flight
-        for(int j = 0;j<n;j++) if(flights[city][j] == 1){
-            max = Math.max(max, dfs(j, k+1, K, flights, days, dp));
+    public int dfs(int[][] flights, int[][] days, int cur_city, int weekno, int[][] memo) {
+        if (weekno == days[0].length)
+            return 0;
+        if (memo[cur_city][weekno] != Integer.MIN_VALUE)
+            return memo[cur_city][weekno];
+        int maxvac = 0;
+        for (int i = 0; i < flights.length; i++) {
+            if (flights[cur_city][i] == 1 || i == cur_city) {
+                int vac = days[i][weekno] + dfs(flights, days, i, weekno + 1, memo);
+                maxvac = Math.max(maxvac, vac);
+            }
         }
-        //stay at the same city
-        max = Math.max(max, dfs(city, k+1, K, flights, days, dp));
-
-        //at the start we don't include "zero" city
-        if(k==-1) return max;
-
-        dp[city][k] = max + days[city][k];
-        
-        return max + days[city][k];
+        memo[cur_city][weekno] = maxvac;
+        return maxvac;
     }
 }
