@@ -1,19 +1,19 @@
 class Solution {
     public int climbStairs(int n) {
+        
         // base cases
-        if(n <= 0) return 0;
-        if(n == 1) return 1;
-        if(n == 2) return 2;
-    
-        int one_step_before = 2;
-        int two_steps_before = 1;
-        int all_ways = 0;
-    
-        for(int i=2; i<n; i++){
-    	    all_ways = one_step_before + two_steps_before;
-    	    two_steps_before = one_step_before;
-            one_step_before = all_ways;
+        int n0 = 1;
+        int n1 = 1;
+        int i = 2;
+        int temp = 0;
+        
+        while(i<=n){
+            temp = n0+n1;
+            n0 = n1;
+            n1 = temp;
+            i++;
         }
-        return all_ways;
+        
+        return n1;
     }
 }
