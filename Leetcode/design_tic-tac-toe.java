@@ -1,13 +1,15 @@
 class TicTacToe {
-    int[] checksum1,checksum2;
-    int n;
+    private int[] rows;
+    private int[] cols;
+    private int diagonal;
+    private int antiDiagonal;
+
     /** Initialize your data structure here. */
     public TicTacToe(int n) {
-        this.n = n;
-        checksum1 = new int[n*2+2];
-        checksum2 = new int[n*2+2];
+        rows = new int[n];
+        cols = new int[n];
     }
-    
+
     /** Player {player} makes a move at ({row}, {col}).
         @param row The row of the board.
         @param col The column of the board.
@@ -17,14 +19,38 @@ class TicTacToe {
                 1: Player 1 wins.
                 2: Player 2 wins. */
     public int move(int row, int col, int player) {
-        int[] checksum = player==1 ? checksum1 : checksum2;
-        if(++checksum[row]==n 
-		|| ++checksum[n+col]==n 
-		|| row==col && ++checksum[n*2]==n 
-		|| row==n-col-1 && ++checksum[n*2+1]==n) return player;
+        int toAdd = player == 1 ? 1 : -1;
+
+        rows[row] += toAdd;
+        cols[col] += toAdd;
+        if (row == col)
+        {
+            diagonal += toAdd;
+        }
+
+        if (col == (cols.length - row - 1))
+        {
+            antiDiagonal += toAdd;
+        }
+
+        int size = rows.length;
+        if (Math.abs(rows[row]) == size ||
+            Math.abs(cols[col]) == size ||
+            Math.abs(diagonal) == size  ||
+            Math.abs(antiDiagonal) == size)
+        {
+            return player;
+        }
+
         return 0;
     }
 }
+
+/**
+ * Your TicTacToe object will be instantiated and called as such:
+ * TicTacToe obj = new TicTacToe(n);
+ * int param_1 = obj.move(row,col,player);
+ */
 
 /**
  * Your TicTacToe object will be instantiated and called as such:
